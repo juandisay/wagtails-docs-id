@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panduan Interaktif Developer Wagtail</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Warm Neutrals -->
+    <!-- Application Structure Plan: Aplikasi ini menggunakan arsitektur sidebar navigasi tetap di sebelah kiri dan area konten utama di sebelah kanan. Struktur ini dipilih karena sangat umum untuk dokumentasi teknis dan memungkinkan developer untuk dengan cepat melompat ke topik tertentu tanpa harus menggulir dokumen linier yang panjang. Setiap item navigasi akan menampilkan bagian konten yang relevan, mengubah aplikasi dari dokumen statis menjadi alat referensi yang efisien dan interaktif. Ini meningkatkan kegunaan bagi developer yang sering perlu mencari informasi spesifik dengan cepat. -->
+    <!-- Visualization & Content Choices: Mengingat sumber laporan adalah panduan teks, tidak ada data kuantitatif untuk divisualisasikan dengan grafik. Sebaliknya, informasi di-'visualisasikan' melalui struktur dan interaktivitas. Konsep seperti 'Struktur Proyek' disajikan dalam format pohon visual menggunakan HTML/CSS. Konsep 'StreamField' yang paling penting dijelaskan melalui demo interaktif di mana pengguna dapat menambahkan 'blok' ke area pratinjau. Ini memberikan pemahaman praktis yang lebih baik daripada teks saja. Fungsionalitas 'Salin ke Papan Klip' ditambahkan ke semua blok kode untuk meningkatkan kegunaan praktis bagi developer. Pilihan ini bertujuan untuk mengubah panduan pasif menjadi alat belajar aktif. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #FDFBF8;
+            color: #3f3f46;
+        }
+        .code-block {
+            background-color: #282c34;
+            color: #abb2bf;
+        }
+        .code-block-header {
+            background-color: #3f3f46;
+        }
+        .nav-link.active {
+            background-color: #EAE6E1;
+            color: #A36A00;
+            font-weight: 600;
+        }
+        .nav-link:hover {
+            background-color: #F4F1ED;
+        }
+        .streamfield-block {
+            border-left: 3px solid #D1C5B4;
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <div class="flex flex-col md:flex-row min-h-screen">
+        <!-- Sidebar Navigation -->
+        <aside class="w-full md:w-64 bg-[#F4F1ED] border-r border-gray-200/50 p-4 md:p-6 flex-shrink-0">
+            <h1 class="text-xl font-bold text-[#A36A00] mb-6">Panduan Wagtail</h1>
+            <nav id="navigation" class="space-y-2">
+                <a href="#" data-target="pengenalan" class="nav-link flex items-center px-4 py-2 rounded-md transition-colors duration-200">Pengenalan</a>
+                <a href="#" data-target="instalasi" class="nav-link flex items-center px-4 py-2 rounded-md transition-colors duration-200">Instalasi</a>
+                <div>
+                    <a href="#" data-target="konsep" class="nav-link flex items-center px-4 py-2 rounded-md transition-colors duration-200">Konsep Inti</a>
+                    <div class="pl-4 mt-1 space-y-1 border-l-2 border-gray-300/50 ml-4">
+                        <a href="#" data-target="konsep-page" class="nav-link text-sm block px-4 py-1.5 rounded-md transition-colors duration-200">Page Models</a>
+                        <a href="#" data-target="konsep-streamfield" class="nav-link text-sm block px-4 py-1.5 rounded-md transition-colors duration-200">StreamField</a>
+                        <a href="#" data-target="konsep-lain" class="nav-link text-sm block px-4 py-1.5 rounded-md transition-colors duration-200">Gambar, Snippets & Forms</a>
+                    </div>
+                </div>
+                <a href="#" data-target="templating" class="nav-link flex items-center px-4 py-2 rounded-md transition-colors duration-200">Templating</a>
+                <a href="#" data-target="lanjutan" class="nav-link flex items-center px-4 py-2 rounded-md transition-colors duration-200">Topik Lanjutan</a>
+                <a href="#" data-target="deployment" class="nav-link flex items-center px-4 py-2 rounded-md transition-colors duration-200">Deployment</a>
+                <a href="#" data-target="ekosistem" class="nav-link flex items-center px-4 py-2 rounded-md transition-colors duration-200">Ekosistem</a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main id="main-content" class="flex-1 p-6 md:p-10 lg:p-12 overflow-y-auto">
+            
+            <!-- Section: Pengenalan -->
+            <section id="pengenalan" class="content-section space-y-6">
+                <h2 class="text-3xl font-bold text-gray-800 border-b pb-2">Pengenalan: Apa itu Wagtail?</h2>
+                <p class="text-lg text-gray-600">
+                    Wagtail adalah Content Management System (CMS) sumber terbuka (open-source) yang ditulis dengan Python dan dibangun di atas framework Django. Filosofi utamanya adalah memberikan kebebasan penuh kepada developer sambil menyediakan antarmuka yang intuitif dan menyenangkan bagi penulis konten. Wagtail digunakan oleh organisasi besar seperti NASA, Google, dan NHS (Layanan Kesehatan Nasional Inggris).
+                </p>
+                <div class="bg-white p-6 rounded-lg border border-gray-200/80">
+                    <h3 class="text-xl font-semibold mb-4 text-gray-700">Fitur Unggulan</h3>
+                    <ul class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                        <li class="bg-[#F4F1ED]/50 p-4 rounded-md"><strong>Arsitektur Fleksibel:</strong> Dibangun di atas model Django.</li>
+                        <li class="bg-[#F4F1ED]/50 p-4 rounded-md"><strong>StreamField:</strong> Pembuatan konten halaman yang dinamis dan modular.</li>
+                        <li class="bg-[#F4F1ED]/50 p-4 rounded-md"><strong>Antarmuka Admin Modern:</strong> Bersih, cepat, dan ramah pengguna.</li>
+                        <li class="bg-[#F4F1ED]/50 p-4 rounded-md"><strong>Manajemen Media Kuat:</strong> Termasuk cropping dan focal point.</li>
+                        <li class="bg-[#F4F1ED]/50 p-4 rounded-md"><strong>Kinerja & Skalabilitas:</strong> Mewarisi kekuatan dari Django.</li>
+                        <li class="bg-[#F4F1ED]/50 p-4 rounded-md"><strong>Komunitas Aktif:</strong> Ekosistem paket pihak ketiga yang kaya.</li>
+                    </ul>
+                </div>
+            </section>
+            
+            <!-- Section: Instalasi -->
+            <section id="instalasi" class="content-section space-y-6" style="display: none;">
+                <h2 class="text-3xl font-bold text-gray-800 border-b pb-2">Instalasi dan Pengaturan Proyek</h2>
+                <p class="text-lg text-gray-600">Memulai proyek Wagtail sangatlah mudah. Bagian ini akan memandu Anda melalui langkah-langkah dasar untuk menyiapkan lingkungan pengembangan lokal Anda, mulai dari instalasi hingga menjalankan server.</p>
+                
+                <h3 class="text-xl font-semibold text-gray-700">Langkah-langkah Memulai</h3>
+                <ol class="space-y-4">
+                    <li>
+                        <strong>1. Buat dan Aktifkan Virtual Environment:</strong>
+                        <div class="code-block rounded-lg overflow-hidden mt-2">
+                            <div class="code-block-header px-4 py-2 text-sm text-gray-300 flex justify-between items-center">
+                                <span>Bash</span><button class="copy-btn text-xs bg-gray-600 hover:bg-gray-500 text-white font-bold py-1 px-2 rounded">Salin</button>
+                            </div>
+                            <pre class="p-4 text-sm overflow-x-auto"><code class="language-bash">python -m venv wagtail_env
+source wagtail_env/bin/activate</code></pre>
+                        </div>
+                    </li>
+                    <li>
+                        <strong>2. Instal Wagtail & Buat Proyek Baru:</strong>
+                        <div class="code-block rounded-lg overflow-hidden mt-2">
+                             <div class="code-block-header px-4 py-2 text-sm text-gray-300 flex justify-between items-center">
+                                <span>Bash</span><button class="copy-btn text-xs bg-gray-600 hover:bg-gray-500 text-white font-bold py-1 px-2 rounded">Salin</button>
+                            </div>
+                            <pre class="p-4 text-sm overflow-x-auto"><code class="language-bash">pip install wagtail
+wagtail start myproject</code></pre>
+                        </div>
+                    </li>
+                    <li>
+                        <strong>3. Migrasi Database & Buat Superuser:</strong>
+                        <div class="code-block rounded-lg overflow-hidden mt-2">
+                             <div class="code-block-header px-4 py-2 text-sm text-gray-300 flex justify-between items-center">
+                                <span>Bash</span><button class="copy-btn text-xs bg-gray-600 hover:bg-gray-500 text-white font-bold py-1 px-2 rounded">Salin</button>
+                            </div>
+                            <pre class="p-4 text-sm overflow-x-auto"><code class="language-bash">cd myproject
+pip install -r requirements.txt
+python manage.py migrate
+python manage.py createsuperuser</code></pre>
+                        </div>
+                    </li>
+                    <li>
+                        <strong>4. Jalankan Server Pengembangan:</strong>
+                         <div class="code-block rounded-lg overflow-hidden mt-2">
+                             <div class="code-block-header px-4 py-2 text-sm text-gray-300 flex justify-between items-center">
+                                <span>Bash</span><button class="copy-btn text-xs bg-gray-600 hover:bg-gray-500 text-white font-bold py-1 px-2 rounded">Salin</button>
+                            </div>
+                            <pre class="p-4 text-sm overflow-x-auto"><code class="language-bash">python manage.py runserver</code></pre>
+                        </div>
+                        <p class="mt-2 text-sm text-gray-500">Antarmuka admin akan tersedia di <code class="bg-gray-200 text-gray-800 px-1 rounded">http://127.0.0.1:8000/admin</code></p>
+                    </li>
+                </ol>
+                <div class="bg-white p-6 rounded-lg border border-gray-200/80 mt-6">
+                    <h3 class="text-xl font-semibold mb-4 text-gray-700">Struktur Proyek yang Dihasilkan</h3>
+                    <div class="font-mono text-sm space-y-1 text-gray-600">
+                        <p>myproject/</p>
+                        <p class="pl-4">├── home/ <span class="text-gray-400"># Aplikasi untuk halaman beranda</span></p>
+                        <p class="pl-4">├── search/ <span class="text-gray-400"># Aplikasi untuk pencarian</span></p>
+                        <p class="pl-4">├── myproject/ <span class="text-gray-400"># Pengaturan proyek</span></p>
+                        <p class="pl-4">└── manage.py <span class="text-gray-400"># Skrip utilitas Django</span></p>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Section: Konsep Inti -->
+            <section id="konsep-page" class="content-section space-y-6" style="display: none;">
+                <h2 class="text-3xl font-bold text-gray-800 border-b pb-2">Konsep Inti: Page Models</h2>
+                <p class="text-lg text-gray-600">
+                    Semua konten di Wagtail terstruktur dalam sebuah **pohon (tree)**. Setiap simpul adalah sebuah **Page**. Setiap tipe halaman (misalnya, Halaman Beranda, Halaman Blog) didefinisikan sebagai *model* Python yang mewarisi `wagtail.models.Page`. Anda dapat mengontrol hierarki dengan `parent_page_types` dan `subpage_types`.
+                </p>
+                <h3 class="text-xl font-semibold text-gray-700">Contoh Model Halaman Blog</h3>
+                 <div class="code-block rounded-lg overflow-hidden mt-2">
+                    <div class="code-block-header px-4 py-2 text-sm text-gray-300 flex justify-between items-center">
+                        <span>blog/models.py</span><button class="copy-btn text-xs bg-gray-600 hover:bg-gray-500 text-white font-bold py-1 px-2 rounded">Salin</button>
+                    </div>
+                    <pre class="p-4 text-sm overflow-x-auto"><code class="language-python">from django.db import models
+from wagtail.models import Page
+from wagtail.fields import RichTextField
+from wagtail.admin.panels import FieldPanel, MultiFieldPanel
+
+class BlogPage(Page):
+    author = models.CharField(max_length=255)
+    date = models.DateField("Post date")
+    body = RichTextField(blank=True)
+
+    # Hanya bisa dibuat di bawah Halaman Daftar Blog
+    parent_page_types = ['blog.BlogIndexPage'] 
+    # Tidak bisa memiliki anak
+    subpage_types = []
+
+    content_panels = Page.content_panels + [
+        MultiFieldPanel([
+            FieldPanel('author'),
+            FieldPanel('date'),
+        ], heading="Informasi Postingan"),
+        FieldPanel('body'),
+    ]</code></pre>
+                </div>
+            </section>
+            
+            <section id="konsep-streamfield" class="content-section space-y-6" style="display: none;">
+                <h2 class="text-3xl font-bold text-gray-800 border-b pb-2">Konsep Inti: StreamField</h2>
+                <p class="text-lg text-gray-600">
+                    StreamField adalah fitur paling kuat di Wagtail untuk konten yang fleksibel. Ini membebaskan Anda dari batasan satu field `RichTextField` monolitik, memungkinkan editor untuk membangun halaman dari berbagai jenis "blok" konten dalam urutan apa pun.
+                </p>
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <div>
+                        <h3 class="text-xl font-semibold text-gray-700 mb-2">Contoh Implementasi</h3>
+                        <div class="code-block rounded-lg overflow-hidden">
+                            <div class="code-block-header px-4 py-2 text-sm text-gray-300 flex justify-between items-center">
+                                <span>models.py</span><button class="copy-btn text-xs bg-gray-600 hover:bg-gray-500 text-white font-bold py-1 px-2 rounded">Salin</button>
+                            </div>
+                            <pre class="p-4 text-sm overflow-x-auto"><code class="language-python">from wagtail.fields import StreamField
+from wagtail.blocks import CharBlock, RichTextBlock, StructBlock
+from wagtail.images.blocks import ImageChooserBlock
+
+class ArticlePage(Page):
+    body = StreamField([
+        ('heading', CharBlock(icon="title")),
+        ('paragraph', RichTextBlock(icon="pilcrow")),
+        ('image', ImageChooserBlock(icon="image")),
+        ('quote', StructBlock([
+            ('text', TextBlock()),
+            ('author', CharBlock()),
+        ], icon='openquote'))
+    ], use_json_field=True, blank=True)</code></pre>
+                        </div>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg border border-gray-200/80">
+                        <h3 class="text-xl font-semibold text-gray-700 mb-4">Demo Interaktif StreamField</h3>
+                        <p class="text-sm text-gray-500 mb-4">Klik tombol di bawah untuk melihat bagaimana blok ditambahkan ke halaman.</p>
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <button data-type="heading" class="stream-btn text-sm bg-blue-100 text-blue-800 px-3 py-1 rounded-full hover:bg-blue-200">Tambah Judul</button>
+                            <button data-type="paragraph" class="stream-btn text-sm bg-green-100 text-green-800 px-3 py-1 rounded-full hover:bg-green-200">Tambah Paragraf</button>
+                            <button data-type="image" class="stream-btn text-sm bg-purple-100 text-purple-800 px-3 py-1 rounded-full hover:bg-purple-200">Tambah Gambar</button>
+                             <button data-type="quote" class="stream-btn text-sm bg-yellow-100 text-yellow-800 px-3 py-1 rounded-full hover:bg-yellow-200">Tambah Kutipan</button>
+                        </div>
+                        <div id="streamfield-preview" class="bg-gray-50 p-4 rounded-md min-h-[150px] space-y-4">
+                            <p class="text-center text-gray-400">Pratinjau konten akan muncul di sini.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <section id="konsep-lain" class="content-section space-y-6" style="display: none;">
+                 <h2 class="text-3xl font-bold text-gray-800 border-b pb-2">Konsep Inti: Gambar, Snippets & Forms</h2>
+                 <div class="space-y-8">
+                     <div>
+                        <h3 class="text-xl font-semibold text-gray-700">Gambar dan Dokumen</h3>
+                        <p class="mt-2 text-gray-600">Wagtail memiliki aplikasi bawaan untuk mengelola aset media. Saat menggunakan gambar di template, Anda dapat memanipulasinya dengan tag `{% image %}`.</p>
+                        <div class="code-block rounded-lg overflow-hidden mt-2">
+                             <div class="code-block-header px-4 py-2 text-sm text-gray-300 flex justify-between items-center">
+                                <span>Django Template</span><button class="copy-btn text-xs bg-gray-600 hover:bg-gray-500 text-white font-bold py-1 px-2 rounded">Salin</button>
+                            </div>
+                            <pre class="p-4 text-sm overflow-x-auto"><code class="language-django">{% load wagtailimages_tags %}
+
+{# Mengubah ukuran lebar gambar #}
+{% image page.header_image width-400 %}
+
+{# Mengisi dan memotong gambar #}
+{% image page.header_image fill-300x200 %}</code></pre>
+                        </div>
+                     </div>
+                     <div>
+                        <h3 class="text-xl font-semibold text-gray-700">Snippets</h3>
+                        <p class="mt-2 text-gray-600">Snippets adalah potongan konten yang dapat digunakan kembali dan tidak hidup di dalam pohon halaman. Ideal untuk data seperti Kategori, Tag, atau Profil Penulis.</p>
+                     </div>
+                     <div>
+                        <h3 class="text-xl font-semibold text-gray-700">Forms</h3>
+                        <p class="mt-2 text-gray-600">Wagtail memudahkan pembuatan formulir kontak atau formulir lainnya dengan mewarisi `AbstractEmailForm`.</p>
+                     </div>
+                 </div>
+            </section>
+
+            <!-- Section: Templating -->
+            <section id="templating" class="content-section space-y-6" style="display: none;">
+                <h2 class="text-3xl font-bold text-gray-800 border-b pb-2">Templating</h2>
+                <p class="text-lg text-gray-600">Wagtail menggunakan sistem template Django. Selain tag dan filter standar Django, Wagtail menyediakan beberapa tag yang sangat berguna untuk merender kontennya.</p>
+                <div class="bg-white p-6 rounded-lg border border-gray-200/80">
+                    <h3 class="text-xl font-semibold text-gray-700 mb-4">Tag Template Wagtail yang Umum</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                        <div class="border p-4 rounded-md">
+                            <code class="font-mono text-amber-800">{% pageurl page_object %}</code>
+                            <p class="mt-1 text-gray-500">Menghasilkan URL untuk sebuah objek halaman.</p>
+                        </div>
+                        <div class="border p-4 rounded-md">
+                            <code class="font-mono text-amber-800">{% slugurl "page_slug" %}</code>
+                            <p class="mt-1 text-gray-500">Menghasilkan URL halaman berdasarkan slug-nya.</p>
+                        </div>
+                        <div class="border p-4 rounded-md">
+                            <code class="font-mono text-amber-800">{% image image_object [filter] %}</code>
+                            <p class="mt-1 text-gray-500">Merender dan memanipulasi gambar.</p>
+                        </div>
+                        <div class="border p-4 rounded-md">
+                            <code class="font-mono text-amber-800">|richtext</code>
+                            <p class="mt-1 text-gray-500">Merender konten dari `RichTextField` dengan aman.</p>
+                        </div>
+                         <div class="border p-4 rounded-md col-span-1 md:col-span-2">
+                            <code class="font-mono text-amber-800">{% include_block block_value %}</code>
+                            <p class="mt-1 text-gray-500">Cara yang lebih bersih untuk merender blok StreamField menggunakan template terpisah.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Section: Topik Lanjutan -->
+            <section id="lanjutan" class="content-section space-y-6" style="display: none;">
+                <h2 class="text-3xl font-bold text-gray-800 border-b pb-2">Topik Lanjutan</h2>
+                <p class="text-lg text-gray-600">Setelah menguasai dasar-dasarnya, Anda dapat menjelajahi fitur-fitur canggih Wagtail untuk membangun aplikasi yang lebih kompleks dan disesuaikan.</p>
+                <div class="space-y-4">
+                    <div class="bg-white p-4 rounded-lg border border-gray-200/80">
+                        <h4 class="font-semibold text-gray-800">Kustomisasi Antarmuka Admin</h4>
+                        <p class="text-sm text-gray-600 mt-1">Gunakan **Hooks** untuk menyisipkan CSS/JS kustom, dan **ModelAdmin** untuk antarmuka CRUD pada model non-halaman.</p>
+                    </div>
+                     <div class="bg-white p-4 rounded-lg border border-gray-200/80">
+                        <h4 class="font-semibold text-gray-800">Pencarian (Search)</h4>
+                        <p class="text-sm text-gray-600 mt-1">Integrasi dengan **Elasticsearch** untuk pencarian yang cepat dan kuat. Konfigurasikan `search_fields` pada model Anda.</p>
+                    </div>
+                     <div class="bg-white p-4 rounded-lg border border-gray-200/80">
+                        <h4 class="font-semibold text-gray-800">API Headless</h4>
+                        <p class="text-sm text-gray-600 mt-1">Gunakan API v2 bawaan untuk mengekspos konten sebagai JSON untuk aplikasi front-end (React, Vue, dll.).</p>
+                    </div>
+                     <div class="bg-white p-4 rounded-lg border border-gray-200/80">
+                        <h4 class="font-semibold text-gray-800">Multi-Situs dan Internasionalisasi (i18n)</h4>
+                        <p class="text-sm text-gray-600 mt-1">Jalankan beberapa situs dari satu instalasi dan sediakan konten dalam berbagai bahasa.</p>
+                    </div>
+                     <div class="bg-white p-4 rounded-lg border border-gray-200/80">
+                        <h4 class="font-semibold text-gray-800">Manajemen Pengguna & Izin</h4>
+                        <p class="text-sm text-gray-600 mt-1">Buat **Grup** pengguna dan berikan izin spesifik pada bagian-bagian tertentu dari pohon halaman.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section: Deployment -->
+            <section id="deployment" class="content-section space-y-6" style="display: none;">
+                <h2 class="text-3xl font-bold text-gray-800 border-b pb-2">Deployment</h2>
+                <p class="text-lg text-gray-600">Praktik deployment Wagtail sama dengan aplikasi Django pada umumnya. Berikut adalah daftar periksa penting untuk memastikan proses deployment ke lingkungan produksi berjalan lancar dan aman.</p>
+                 <div class="bg-white p-6 rounded-lg border border-gray-200/80">
+                    <h3 class="text-xl font-semibold mb-4 text-gray-700">Daftar Periksa Produksi</h3>
+                    <ul class="list-disc list-inside space-y-2 text-gray-600">
+                        <li>Atur <code class="bg-red-100 text-red-800 text-sm px-1 rounded">DEBUG = False</code> untuk keamanan.</li>
+                        <li>Muat <code class="bg-gray-200 text-gray-800 text-sm px-1 rounded">SECRET_KEY</code> dari *environment variable*.</li>
+                        <li>Konfigurasikan <code class="bg-gray-200 text-gray-800 text-sm px-1 rounded">ALLOWED_HOSTS</code> dengan domain Anda.</li>
+                        <li>Gunakan **PostgreSQL** sebagai database di produksi.</li>
+                        <li>Jalankan <code class="bg-gray-200 text-gray-800 text-sm px-1 rounded">python manage.py collectstatic</code>.</li>
+                        <li>Gunakan layanan seperti **Amazon S3** untuk file media.</li>
+                        <li>Gunakan **Gunicorn** atau uWSGI sebagai server aplikasi.</li>
+                        <li>Gunakan **Nginx** sebagai *reverse proxy*.</li>
+                    </ul>
+                </div>
+            </section>
+            
+             <!-- Section: Ekosistem -->
+            <section id="ekosistem" class="content-section space-y-6" style="display: none;">
+                <h2 class="text-3xl font-bold text-gray-800 border-b pb-2">Ekosistem & Komunitas</h2>
+                <p class="text-lg text-gray-600">Jangan membangun semuanya dari awal. Wagtail memiliki ekosistem paket pihak ketiga yang kaya dan komunitas yang sangat aktif dan suportif untuk membantu Anda.</p>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                     <div class="bg-white p-6 rounded-lg border border-gray-200/80">
+                        <h3 class="text-xl font-semibold mb-4 text-gray-700">Paket Pihak Ketiga Populer</h3>
+                        <ul class="list-disc list-inside space-y-2 text-gray-600">
+                           <li><code class="bg-gray-200 text-gray-800 text-sm px-1 rounded">wagtail-localize</code>: Solusi penerjemahan canggih.</li>
+                           <li><code class="bg-gray-200 text-gray-800 text-sm px-1 rounded">wagtail-headless-preview</code>: Pratinjau untuk headless CMS.</li>
+                           <li><code class="bg-gray-200 text-gray-800 text-sm px-1 rounded">wagtail-metadata</code>: Alat bantu SEO yang lebih baik.</li>
+                        </ul>
+                    </div>
+                     <div class="bg-white p-6 rounded-lg border border-gray-200/80">
+                        <h3 class="text-xl font-semibold mb-4 text-gray-700">Mencari Bantuan</h3>
+                         <ul class="list-disc list-inside space-y-2 text-gray-600">
+                           <li><strong>Slack:</strong> Tempat terbaik untuk bertanya dan berdiskusi.</li>
+                           <li><strong>GitHub Discussions:</strong> Untuk pertanyaan dan berbagi ide.</li>
+                           <li><strong>Stack Overflow:</strong> Gunakan tag `wagtail`.</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+            
+        </main>
+    </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const navLinks = document.querySelectorAll('#navigation .nav-link');
+    const contentSections = document.querySelectorAll('.content-section');
+
+    function showSection(targetId) {
+        let found = false;
+        contentSections.forEach(section => {
+            if (section.id.startsWith(targetId)) {
+                section.style.display = 'block';
+                found = true;
+            } else {
+                section.style.display = 'none';
+            }
+        });
+        
+        // Fallback for parent nav items like 'konsep'
+        if (!found) {
+            const firstChildId = `konsep-page`;
+            document.getElementById(firstChildId).style.display = 'block';
+        }
+    }
+
+    function updateActiveLink(activeLink) {
+        navLinks.forEach(link => link.classList.remove('active'));
+        activeLink.classList.add('active');
+        
+        // Handle parent active state
+        if (activeLink.parentElement.classList.contains('pl-4')) {
+            const parentLink = activeLink.parentElement.parentElement.querySelector('a');
+            if (parentLink) {
+                parentLink.classList.add('active');
+            }
+        }
+    }
+    
+    navLinks.forEach(link => {
+        link.addEventListener('click', function (e) {
+            e.preventDefault();
+            const targetId = this.dataset.target;
+            showSection(targetId);
+            updateActiveLink(this);
+            window.scrollTo(0, 0);
+        });
+    });
+
+    // Set initial active state
+    const initialLink = document.querySelector('a[data-target="pengenalan"]');
+    if (initialLink) {
+        initialLink.click();
+    }
+
+    // Copy to clipboard functionality
+    const copyButtons = document.querySelectorAll('.copy-btn');
+    copyButtons.forEach(btn => {
+        btn.addEventListener('click', function () {
+            const code = this.closest('.code-block').querySelector('pre code').innerText;
+            const tempTextArea = document.createElement('textarea');
+            tempTextArea.value = code;
+            document.body.appendChild(tempTextArea);
+            tempTextArea.select();
+            
+            try {
+                document.execCommand('copy');
+                this.textContent = 'Disalin!';
+                setTimeout(() => {
+                    this.textContent = 'Salin';
+                }, 2000);
+            } catch (err) {
+                console.error('Gagal menyalin teks: ', err);
+            }
+            
+            document.body.removeChild(tempTextArea);
+        });
+    });
+
+    // StreamField Demo
+    const streamButtons = document.querySelectorAll('.stream-btn');
+    const previewArea = document.getElementById('streamfield-preview');
+    let isPreviewEmpty = true;
+
+    streamButtons.forEach(btn => {
+        btn.addEventListener('click', function() {
+            if (isPreviewEmpty) {
+                previewArea.innerHTML = '';
+                isPreviewEmpty = false;
+            }
+
+            const type = this.dataset.type;
+            const block = document.createElement('div');
+            block.className = 'streamfield-block p-3 bg-white rounded-md shadow-sm animate-fade-in';
+            
+            let content = '';
+            switch(type) {
+                case 'heading':
+                    content = '<h3 class="text-lg font-semibold text-blue-800">Ini adalah Blok Judul</h3><p class="text-xs text-gray-400 mt-1">tipe: heading</p>';
+                    break;
+                case 'paragraph':
+                    content = '<p class="text-gray-700 text-sm">Ini adalah blok paragraf. Anda dapat menulis teks kaya di sini dengan format seperti tebal, miring, dan daftar.</p><p class="text-xs text-gray-400 mt-1">tipe: paragraph</p>';
+                    break;
+                case 'image':
+                    content = '<div class="flex items-center gap-3"><div class="w-16 h-12 bg-purple-200 rounded flex items-center justify-center text-purple-600 text-xs">Gambar</div><div><p class="font-medium text-purple-800">Blok Gambar</p><p class="text-xs text-gray-400">tipe: image</p></div></div>';
+                    break;
+                case 'quote':
+                     content = '<blockquote class="border-l-4 border-yellow-400 pl-4 italic text-yellow-800 text-sm">"Ini adalah blok kutipan untuk menyorot teks penting."<footer class="not-italic text-xs text-gray-500 mt-1">- Penulis Kutipan</footer></blockquote><p class="text-xs text-gray-400 mt-1">tipe: quote</p>';
+                     break;
+            }
+            block.innerHTML = content;
+            previewArea.appendChild(block);
+            previewArea.scrollTop = previewArea.scrollHeight;
+        });
+    });
+});
+</script>
+
+</body>
+</html>
